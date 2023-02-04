@@ -1,0 +1,54 @@
+{% extends 'schoolapp/base.html' %}
+{% block content %}
+    <div class="row">
+         <h4 class="text-center alert alert-secondary">School Dashboard</h4>
+        {% if school_name %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Create</th>
+                        <th scope="col">Update</th>
+                    </tr>
+                </thead>
+                <tbody id="schools">
+                    {% for school in school_name %}
+                        <tr>
+                            <th scope="row">{{ school.id }}</th>
+                            <td>{{ school.name }}</td>
+                            <td>{{ school.create_at }}</td>
+                            <td>{{ school.update_at }}</td>
+                            <td>
+                            <a href="{% url 'school_update' school.id %}" class="btn btn-success btn-sm">Update</a>
+                            <form action="{% url 'school_delete' school.id %}" method="post"
+                                  class="d-inline">{% csrf_token %}
+                                <input type="submit" class="btn btn-warning btn-sm" value="Delete">
+                            </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        {% endif %}
+     <a href="{% url 'school_insert' %}" class="text-center btn btn-dark btn-sm">Add School</a>
+    </div>
+    <br>
+    <br>
+{% endblock %}
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "{% url 'school_view' %}",
+      type: "GET",
+      dataType: "json",
+      success: function(response) {
+        $.each(response.data, function(index, school, ) {
+          $("#schools").append("<tr><td>" + school.name + "</td><td>" +
+              school.create_at + "</td><td>" + school.update_at + "</td></tr>");
+        });
+      }
+    });
+  });
+</script>

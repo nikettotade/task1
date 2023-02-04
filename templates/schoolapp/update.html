@@ -1,0 +1,12 @@
+{% extends 'schoolapp/base.html' %}
+{% block content %}
+    <h4 class="text-center alert alert-primary">Update Task</h4>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-success btn-sm" value="Update">
+        <a href="{% url 'school_insert' %}" class="btn btn-info btn-sm">Back to Home</a>
+    </form>
+    <br>
+    <br>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'schoolapp/base.html' %}
+{% block content %}
+    <div class="row">
+        <h4 class="text-center alert alert-secondary">Student Dashboard</h4>
+        {% if student_name %}
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Enrollment</th>
+                    <th scope="col">School</th>
+                    <th scope="col">Create</th>
+                    <th scope="col">Update</th>
+                </tr>
+                </thead>
+                <tbody id="students">
+                {% for student in student_name %}
+                    <tr>
+                        <th scope="row">{{ student.id }}</th>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.enrollment }}</td>
+                        <td>{{ student.school }}</td>
+                        <td>{{ student.create_at }}</td>
+                        <td>{{ student.update_at }}</td>
+                        <td>
+                            <a href="{% url 'student_update_view' student.id %}"
+                               class="btn btn-success btn-sm">Update</a>
+                            <form action="{% url 'student_delete_view' student.id %}" method="post"
+                                  class="d-inline">{% csrf_token %}
+                                <input type="submit" class="btn btn-warning btn-sm" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        {% endif %}
+        <a href="{% url 'student_insert' %}" class="text-center btn btn-dark btn-sm">Add Student</a>
+    </div>
+    <br>
+    <br>
+{% endblock %}
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "{% url 'student_name' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                $.each(response.data, function (index, student,) {
+                    $("#students").append("<tr><td>" + student.name + "</td><td>" + student.enrollment + "</td><td>" + student.school + "</td><td>" +
+                        school.create_at + "</td><td>" + student.update_at + "</td></tr>");
+                });
+            }
+        });
+    });
+</script>
